@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define ARRAY_TOTAL_ELEMENTS 8
+#define ARRAY_EXPAND_LIMIT 4
 
 typedef struct {
     uint current_total_elements;
@@ -24,6 +25,23 @@ Dynamic *create_array(int elements[ARRAY_TOTAL_ELEMENTS]) {
 
 size_t get_current_array_length(Dynamic *ref) {
     return ref->current_length;
+}
+
+
+Dynamic *expand_length(Dynamic **ref, size_t size) {
+    Dynamic *temp = NULL;
+
+    temp = realloc(*ref, get_current_array_length(*ref) * size);
+    if (temp == NULL) {
+        return NULL;
+    }
+
+    *ref = temp;
+
+    temp = NULL;
+    free(temp);
+
+    return *ref;
 }
 
 void show_array_size(Dynamic *ref) {
@@ -126,9 +144,9 @@ size_t push(Dynamic **ref, int new_element) {
         exit(1);
     }
 
-    temp = realloc(*ref, get_current_array_length(*ref) * sizeof(new_element));
+    temp = expand_length(&*ref, get_current_array_length(*ref) * sizeof(new_element));
     if (temp == NULL) {
-        perror("Realloc failed");
+        perror("We cannot expand the length of the array");
         exit(1);
     }
 
@@ -144,12 +162,30 @@ size_t push(Dynamic **ref, int new_element) {
     return (*ref)->current_length;
 }
 
+// void add(Dynamic *ref, int element, int index) {
+//     Dynamic *temp = NULL;
+
+//     if (ref == NULL) {
+//         perror("Try adding to a NULL reference array");
+//         printf("Try create an array first: create_array(int elements)");
+//         exit(1);
+//     }
+
+//     int last_element_index = ref->current_total_elements - 1;  
+//     int is_index_outbound = last_element_index < index;
+
+//     if (is_index_outbound == 1) {
+//         temp = expand_length(ref, );
+//     }
+// }
+
 int main() {
     int els[ARRAY_TOTAL_ELEMENTS] = {1, 2, 3, 4, 5, 6, 7, 8};
 
     Dynamic *ref = create_array(els);
     
     size_t new_length = push(&ref, 9);
+    new_length = push(&ref, 10);
 
     print_array(ref);
     show_array_size(ref);
