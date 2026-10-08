@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define ARRAY_TOTAL_ELEMENTS 8
 
@@ -21,6 +22,10 @@ Dynamic *create_array(int elements[ARRAY_TOTAL_ELEMENTS]) {
     }
 }
 
+size_t get_current_array_length(Dynamic *ref) {
+    return ref->current_length;
+}
+
 void show_array_size(Dynamic *ref) {
     if (ref == NULL) {
         perror("Ref is null");
@@ -36,6 +41,24 @@ void show_array_size(Dynamic *ref) {
     }
 
     printf("%ld\n", ref->current_length);
+}
+
+void show_array_total_elements(Dynamic *ref) {
+    if (ref == NULL) {
+        perror("Ref is null");
+        return;
+    }
+
+    if (ref->current_length == 0) {
+        return;
+    }
+
+    if (ref->current_total_elements == 0) {
+        return;
+    }
+
+    printf("%d\n", ref->current_total_elements);
+
 }
 
 void print_array(Dynamic *ref) {
@@ -95,14 +118,41 @@ int *lookup(Dynamic *ref, int index) {
     return &ref->elements[index];
 }
 
+size_t push(Dynamic **ref, int new_element) {
+    Dynamic *temp = NULL;
+
+    if (*ref == NULL) {
+        perror("Ref is null");
+        exit(1);
+    }
+
+    temp = realloc(*ref, get_current_array_length(*ref) * sizeof(new_element));
+    if (temp == NULL) {
+        perror("Realloc failed");
+        exit(1);
+    }
+
+    temp->current_total_elements++;
+    temp->elements[temp->current_total_elements - 1] = new_element;
+    temp->current_length = sizeof(int) * temp->current_total_elements;
+
+    *ref = temp;
+
+    temp = NULL;
+    free(temp);
+
+    return (*ref)->current_length;
+}
+
 int main() {
     int els[ARRAY_TOTAL_ELEMENTS] = {1, 2, 3, 4, 5, 6, 7, 8};
 
     Dynamic *ref = create_array(els);
-    print_array(ref);
+    
+    size_t new_length = push(&ref, 9);
 
-    ref = NULL;
-    free(ref);
+    print_array(ref);
+    show_array_size(ref);
 
     return 0;
 }
