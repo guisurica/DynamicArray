@@ -1,25 +1,108 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// elementos atuais
-// tamanho atual
+#define ARRAY_TOTAL_ELEMENTS 8
 
 typedef struct {
     uint current_total_elements;
     size_t current_length;
-    int elements[];
+    int elements[ARRAY_TOTAL_ELEMENTS];
 } Dynamic;
 
-int *create_array(*Dynamic ref) {
+Dynamic *create_array(int elements[ARRAY_TOTAL_ELEMENTS]) {
 
+    Dynamic *ref = malloc(sizeof(Dynamic)); 
+
+    ref->current_length = sizeof(int) * ARRAY_TOTAL_ELEMENTS;
+    ref->current_total_elements = ARRAY_TOTAL_ELEMENTS;
+
+    for(int i = 0; i < ARRAY_TOTAL_ELEMENTS; i++) {
+        ref->elements[i] = elements[i];
+    }
+}
+
+void show_array_size(Dynamic *ref) {
+    if (ref == NULL) {
+        perror("Ref is null");
+        return;
+    }
+
+    if (ref->current_length == 0) {
+        return;
+    }
+
+    if (ref->current_total_elements == 0) {
+        return;
+    }
+
+    printf("%ld\n", ref->current_length);
+}
+
+void print_array(Dynamic *ref) {
+    if (ref->current_total_elements <= 0) {
+        printf("Empty list\n");
+        return;
+    }
+
+    for(int i = 0; i < ref->current_total_elements; i++) {
+        if (i <= 0) {
+            printf("[");
+        }
+
+        if (i == ref->current_total_elements - 1) {
+            printf("%d", ref->elements[i]);
+            printf("]\n");
+        } else {
+            printf("%d, ", ref->elements[i]);
+        }
+    }
+}
+
+void print_array_element_addrs(Dynamic *ref, int direction) {
+    if (ref->current_total_elements <= 0) {
+        printf("Empty list\n");
+        return;
+    }
+
+    for(int i = 0; i < ref->current_total_elements; i++) {
+        if (i == ref->current_total_elements - 1) {
+            printf("%p\n", &ref->elements[i]);
+        } else {
+            if (direction > 0) {
+                printf("%p\n", &ref->elements[i]);
+            } else {
+                printf("%p|", &ref->elements[i]);
+            }
+        }
+    }
+}
+
+int *lookup_first(Dynamic *ref) {
+    if (ref->current_total_elements <= 0) return NULL;
+    
+    return &ref->elements[0];
+}
+
+int *lookup_last(Dynamic *ref) {
+    if (ref->current_total_elements <= 0) return NULL;
+
+    return &ref->elements[ref->current_total_elements - 1];
+}
+
+int *lookup(Dynamic *ref, int index) {
+    if (ref->current_total_elements <= 0) return NULL;
+
+    return &ref->elements[index];
 }
 
 int main() {
-    printf("%ld\n", sizeof(int));
-    int numbers[5] = {1, 2, 3, 4, 5};
-    for(int i = 0; i < 5; i++) {
-        printf("%p\n", &numbers[i]);
-    }
+    int els[ARRAY_TOTAL_ELEMENTS] = {1, 2, 3, 4, 5, 6, 7, 8};
+
+    Dynamic *ref = create_array(els);
+    print_array(ref);
+
+    ref = NULL;
+    free(ref);
 
     return 0;
 }
