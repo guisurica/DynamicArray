@@ -7,7 +7,7 @@
 int main(void) {
     int elements[2] = {1, 2};
     Error *error = NULL;
-    Numbers *ref = create_array(elements, 4, &error);
+    Numbers *ref = create_array(elements, 2, &error);
 
     if (error != NULL) {
         printf("%s\n", error->message);

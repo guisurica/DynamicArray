@@ -1,7 +1,7 @@
 #ifndef DYNAMIC_SHARED_H
 #define DYNAMIC_SHARED_H
 
-#define STASH_VALUE 0x00
+#define STASH_VALUE 999999
 
 #include <errno.h>
 

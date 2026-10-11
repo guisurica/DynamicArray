@@ -11,11 +11,16 @@
 Numbers *create_array(int *n, int init_value, Error **error) {
     Error *temp_error = malloc(sizeof(Error));
     Numbers *ref = malloc(sizeof(Numbers));
-    
+
     int number_size = *n;
     int input_array_length = 0;
 
-    return ref;
+    n[init_value] = '\0';
+
+    while(*n != '\0') {
+        n++;
+        input_array_length++;
+    }
 
     if (init_value != input_array_length) {
         temp_error->error_code = errno;
