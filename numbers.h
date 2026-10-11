@@ -18,5 +18,4 @@ void pop(Numbers *pref, Error *error);
 
 size_t *get_element(Numbers *pref, int index, Error *error);
 
-
 #endif

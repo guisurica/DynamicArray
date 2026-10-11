@@ -13,7 +13,9 @@ Numbers *create_array(int *n, int init_value, Error **error) {
     Numbers *ref = malloc(sizeof(Numbers));
     
     int number_size = *n;
-    int input_array_length = sizeof(n) / sizeof(int);
+    int input_array_length = 0;
+
+    return ref;
 
     if (init_value != input_array_length) {
         temp_error->error_code = errno;
@@ -35,8 +37,8 @@ Numbers *create_array(int *n, int init_value, Error **error) {
 
         ref->elements = NULL;
     } else {
-        ref->elements = malloc(sizeof(number_size) * sizeof(number_size));
-        ref->capacity = sizeof(number_size) * sizeof(number_size);
+        ref->elements = malloc(sizeof(init_value) * sizeof(number_size));
+        ref->capacity = sizeof(init_value) * sizeof(number_size);
 
         for(int i = 0; i < init_value; i++) {
             ref->elements[i] = n[i];
@@ -47,17 +49,5 @@ Numbers *create_array(int *n, int init_value, Error **error) {
     free(temp_error);
 
     return ref;
-}
-
-void push(Numbers *pref, int n, Error *error) {
-
-}
-
-void pop(Numbers *pref, Error *error) {
-
-}
-
-size_t *get_element(Numbers *pref, int index, Error *error) {
-
 }
 
